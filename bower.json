@@ -1,0 +1,17 @@
+{
+  "name": "polymer-cards",
+  "description": "componente padre para cards",
+  "main": "polymer-cards.html",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^2.0.0",
+    "iron-ajax": "@polymer/iron-ajax#2.0-preview",
+    "paper-card": "polymerelements/paper-card#2.0-preview"
+  },
+  "devDependencies": {
+    "web-component-tester": "Polymer/web-component-tester#^6.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0"
+  },
+  "resolutions": {
+    "polymer": "^2.0.0"
+  }
+}

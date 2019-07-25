@@ -1,0 +1,74 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel="import" href="/bower_components/polymer-card/polymer-card.html">
+<link rel="import" href="/bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="/bower_components/polymer/lib/elements/dom-repeat.html">
+
+<dom-module id="polymer-cards">
+  <template>
+    <style>
+      /* :host {
+        display: block;
+      } */
+
+      polymer-card{
+        display: inline-flex;
+        border: 5px bold blue;
+      }
+
+    </style>
+
+    <polymer-card title="Datos Demo-Card" list="[[listService]]"></polymer-card>
+    <polymer-card title="Datos Demo-Card" list="[[listService]]"></polymer-card>
+    <polymer-card title="Datos Demo-Card" list="[[listService]]"></polymer-card>
+
+
+  <iron-ajax
+    auto
+    url="https://extra-server.herokuapp.com/electronicTicketed/accounts/v1/accounts/717533/current-balances/"
+    handle-as="json"
+    on-response="someFunc"
+  </iron-ajax>
+  
+  
+</template>
+
+<script>
+
+    /**
+     * `polymer-cards`
+     * componente padre para cards
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+
+    class PolymerCards extends Polymer.Element {
+      static get is() { return 'polymer-cards'; }
+      static get properties() {
+        return {
+          listService:{
+            type: Array
+          }
+        }
+      };
+
+      someFunc(data){
+        var dataArray = data.detail.response.data;
+        var cardArray = [];
+        dataArray.forEach(function(item) {
+          let itemDescription = {
+            'key': item.balanceType,
+            'value': item.amount
+          };
+          cardArray.push(itemDescription);
+        }.bind(this));
+        console.log(cardArray);
+        this.listService = cardArray;
+      };
+
+    };
+
+    window.customElements.define(PolymerCards.is, PolymerCards);
+  </script>
+</dom-module>
