@@ -2,6 +2,8 @@
 <link rel="import" href="/bower_components/polymer-card/polymer-card.html">
 <link rel="import" href="/bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="/bower_components/polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="bower_components/iron-icons/image-icons.html">
+
 
 <dom-module id="polymer-cards">
   <template>
@@ -10,16 +12,15 @@
         display: block;
       } */
 
-      polymer-card{
-        display: inline-flex;
-        border: 5px bold blue;
-      }
 
     </style>
 
-    <polymer-card title="Datos Demo-Card" list="[[listService]]"></polymer-card>
-    <polymer-card title="Datos Demo-Card" list="[[listService]]"></polymer-card>
-    <polymer-card title="Datos Demo-Card" list="[[listService]]"></polymer-card>
+    <polymer-card title="Datos Demo-Card" list="[[listService]]"
+    click='[{"text": "Ver más", "type": "blue", "icon": "maps:directions-bus", "event":"clicked"}]'></polymer-card>
+    <polymer-card title="Datos Demo-Card" list="[[listService]]"
+    click='[{"text": "Ver más", "type": "blue", "icon": "maps:directions-bus", "event":"clicked"}]'></polymer-card>
+    <polymer-card title="Datos Demo-Card" list="[[listService]]"
+    click='[{"text": "Ver menos", "type": "blue", "icon": "image:remove-red-eye", "event":"clicked"}]'></polymer-card>
 
 
   <iron-ajax
@@ -56,9 +57,24 @@
       someFunc(data){
         var dataArray = data.detail.response.data;
         var cardArray = [];
+
         dataArray.forEach(function(item) {
+          var translatedKey ;
+          let englishKey = item.balanceType;
+          if (englishKey === "AVAILABLE_BALANCE"){
+            var translatedKey = "SALDO DISPONIBLE"
+          } else if (englishKey === "INVESTMENT_BALANCE"){
+            var translatedKey = "SALDO DE INVERSIÓN"
+          } else if(englishKey === "WITHHELD_DEPOSIT_BALANCE"){
+            var translatedKey = "SALDO DE DEPÓSITO"
+          } else if(englishKey === "WITHHELD_WITHDRAWAL_BALANCE"){
+            var translatedKey = "SALDO DE RETIRO"
+          } else if(englishKey === "TOTAL_BALANCE"){
+            var translatedKey = "SALDO TOTAL"
+          };
+          
           let itemDescription = {
-            'key': item.balanceType,
+            'key': translatedKey,
             'value': item.amount
           };
           cardArray.push(itemDescription);
