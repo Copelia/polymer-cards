@@ -24,7 +24,7 @@
     <polymer-card title="Información de Saldos" list="[[listService]]"
     click='[{"text": "Ver más", "type": "blue", "icon": "image:remove-red-eye", "event":"clicked"}]'></polymer-card>
 
-    <dm-get-account on-account-info="_setInfoAccount"></dm-get-account>
+    <dm-get-account id="dmGetAccount" on-account-info="_setInfoAccount"></dm-get-account>
     <polymer-card title="Información de la cuenta" list="[[listAccount]]"
     click='[{"text": "Ver más", "type": "blue", "icon": "image:remove-red-eye", "event":"clicked"}]'></polymer-card>
 
@@ -62,9 +62,11 @@
 
       _setInfoBalances(e, dataBalance){
         this.listService = dataBalance.cardArray;
-        console.log(dataBalance.status);
-        if(dataBalance.status === '200'){
-          console.log('I am in');
+        // console.log(dataBalance.status);
+        
+        if(dataBalance.status === 200){
+          this.$.dmGetAccount.startRequest();
+          console.log('OKEI');
         }
       }
 
@@ -78,7 +80,7 @@
 
       _setInfoAccount(dataAccount){
         this.listAccount = dataAccount.detail.accountArray;
-        console.log(dataAccount.detail.accountArray);
+        // console.log(dataAccount.detail.accountArray);
       }
 
     };
