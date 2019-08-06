@@ -1,35 +1,38 @@
 <link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../iron-icons/image-icons.html">
 <link rel="import" href="../polymer-card/polymer-card.html">
 <link rel="import" href="../iron-ajax/iron-ajax.html">
-<link rel="import" href="../polymer/lib/elements/dom-repeat.html">
-<link rel="import" href="../iron-icons/image-icons.html">
-
+<link rel="import" href="../dm-get-balances/dm-get-balances.html">
+<link rel="import" href="../dm-get-account/dm-get-account.html">
 
 <dom-module id="polymer-cards">
   <template>
     <style>
+
+      main {
+        display: flex;
+      }
       /* :host {
         display: block;
       } */
-
-
     </style>
 
-    <polymer-card title="Datos Demo-Card" list="[[listService]]"
-    click='[{"text": "Ver más", "type": "blue", "icon": "image:remove-red-eye", "event":"clicked"}]'></polymer-card>
-    <polymer-card title="Datos Demo-Card" list="[[listService]]"
-    click='[{"text": "Ver más", "type": "blue", "icon": "image:remove-red-eye", "event":"clicked"}]'></polymer-card>
-    <polymer-card title="Datos Demo-Card" list="[[listService]]"
+    <main>
+
+    <dm-get-balances id="23456789" on-balance-info="_setInfoBalances"></dm-get-balances>
+    <!-- on-validate-status="_validateStatus" -->
+    <polymer-card title="Información de Saldos" list="[[listService]]"
     click='[{"text": "Ver más", "type": "blue", "icon": "image:remove-red-eye", "event":"clicked"}]'></polymer-card>
 
+    <dm-get-account on-account-info="_setInfoAccount"></dm-get-account>
+    <polymer-card title="Información de la cuenta" list="[[listAccount]]"
+    click='[{"text": "Ver más", "type": "blue", "icon": "image:remove-red-eye", "event":"clicked"}]'></polymer-card>
 
-  <iron-ajax
-    auto
-    url="https://extra-server.herokuapp.com/electronicTicketed/accounts/v1/accounts/717533/current-balances/"
-    handle-as="json"
-    on-response="someFunc"
-  </iron-ajax>
+    <!--<dm-get-workplace on-workplace-info="_setInfoWorkplace"></dm-get-workplace>
+    <polymer-card title="Datos Demo-Card" list="[[listWorkplace]]"
+    click='[{"text": "Ver más", "type": "blue", "icon": "image:remove-red-eye", "event":"clicked"}]'></polymer-card> -->
   
+   </main>
   
 </template>
 
@@ -50,38 +53,33 @@
         return {
           listService:{
             type: Array
+          },
+          listAccount:{
+            type: Array
           }
         }
       };
 
-      someFunc(data){
-        var dataArray = data.detail.response.data;
-        var cardArray = [];
+      _setInfoBalances(e, dataBalance){
+        this.listService = dataBalance.cardArray;
+        console.log(dataBalance.status);
+        if(dataBalance.status === '200'){
+          console.log('I am in');
+        }
+      }
 
-        dataArray.forEach(function(item) {
-          var translatedKey ;
-          let englishKey = item.balanceType;
-          if (englishKey === "AVAILABLE_BALANCE"){
-            var translatedKey = "SALDO DISPONIBLE"
-          } else if (englishKey === "INVESTMENT_BALANCE"){
-            var translatedKey = "SALDO DE INVERSIÓN"
-          } else if(englishKey === "WITHHELD_DEPOSIT_BALANCE"){
-            var translatedKey = "SALDO DE DEPÓSITO"
-          } else if(englishKey === "WITHHELD_WITHDRAWAL_BALANCE"){
-            var translatedKey = "SALDO DE RETIRO"
-          } else if(englishKey === "TOTAL_BALANCE"){
-            var translatedKey = "SALDO TOTAL"
-          };
-          
-          let itemDescription = {
-            'key': translatedKey,
-            'value': item.amount
-          };
-          cardArray.push(itemDescription);
-        }.bind(this));
-        console.log(cardArray);
-        this.listService = cardArray;
-      };
+      // _validateStatus(status){
+        // if(status.detail.status === '200'){
+          // this.$.dmGetAccount.generateRequest();
+          // getElementByd('dmGetAccount').generateRequest();
+          // console.log('OKEI');
+      //   }
+      // }
+
+      _setInfoAccount(dataAccount){
+        this.listAccount = dataAccount.detail.accountArray;
+        console.log(dataAccount.detail.accountArray);
+      }
 
     };
 
